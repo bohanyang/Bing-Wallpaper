@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace BohanYang\BingWallpaper;
 
 use GuzzleHttp\Exception\ConnectException;
-use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Exception\RequestException as HttpRequestException;
 use GuzzleHttp\Middleware;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -55,7 +55,7 @@ final class GuzzleMiddleware
                             return $response;
                         }
 
-                        throw RequestException::create($request, $response);
+                        throw HttpRequestException::create($request, $response);
                     }
                 );
             };

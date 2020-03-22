@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace BohanYang\BingWallpaper;
 
 use Exception;
-use GuzzleHttp\Client;
+use GuzzleHttp\Client as HttpClient;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\MessageFormatter;
 use GuzzleHttp\Middleware;
@@ -20,12 +20,12 @@ use function GuzzleHttp\choose_handler;
 use function GuzzleHttp\Promise\unwrap;
 use function Safe\json_decode;
 
-final class ArchiveClient
+final class Client
 {
     /** @var string */
     private $endpoint;
 
-    /** @var Client */
+    /** @var HttpClient */
     private $client;
 
     /** @var LoggerInterface */
@@ -57,7 +57,7 @@ final class ArchiveClient
             );
         }
 
-        $this->client = new Client(['handler' => $handler]);
+        $this->client = new HttpClient(['handler' => $handler]);
     }
 
     private function get(RequestParams $params) : PromiseInterface
