@@ -8,7 +8,7 @@ use Exception;
 use GuzzleHttp\Client as HttpClient;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\MessageFormatter;
-use GuzzleHttp\Middleware;
+use GuzzleHttp\Middleware as GuzzleMiddleware;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Promise\RejectedPromise;
 use Psr\Http\Message\ResponseInterface;
@@ -40,16 +40,16 @@ final class Client
         $this->endpoint = $endpoint;
         $handler = $handler ?? choose_handler();
         $handler = new HandlerStack($handler);
-        $handler->push(Middleware::httpErrors(), 'http_errors');
-        $handler->push(Middleware::redirect(), 'allow_redirects');
-        $handler->push(GuzzleMiddleware::retry(), 'retry');
+        $handler->push(GuzzleMiddleware::httpErrors(), 'http_errors');
+        $handler->push(GuzzleMiddleware::redirect(), 'allow_redirects');
+        $handler->push(Middleware::retry(), 'retry');
 
         if ($logger === null){
             $this->logger = new NullLogger();
         } else {
             $this->logger = $logger;
             $handler->push(
-                Middleware::log(
+                GuzzleMiddleware::log(
                     $logger,
                     $formatter ?? new MessageFormatter(),
                     LogLevel::DEBUG

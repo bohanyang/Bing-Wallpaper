@@ -6,11 +6,11 @@ namespace BohanYang\BingWallpaper;
 
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException as HttpRequestException;
-use GuzzleHttp\Middleware;
+use GuzzleHttp\Middleware as GuzzleMiddleware;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
-final class GuzzleMiddleware
+final class Middleware
 {
     public static function retry(callable $statusDecider = null, int $maxRetries = 3, callable $delay = null) : callable
     {
@@ -20,7 +20,7 @@ final class GuzzleMiddleware
             };
         }
 
-        return Middleware::retry(
+        return GuzzleMiddleware::retry(
             function ($retries, $request, ?ResponseInterface $response, $reason) use (
                 $maxRetries,
                 $statusDecider
