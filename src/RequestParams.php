@@ -6,9 +6,9 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
 
-class MarketDate
+class RequestParams
 {
-    /** @var MarketTimeZone */
+    /** @var Market */
     private $market;
 
     /** @var DateTimeImmutable */
@@ -19,7 +19,7 @@ class MarketDate
 
     private function __construct() {}
 
-    public static function createToday(MarketTimeZone $market, DateTimeImmutable $today = null) : self
+    public static function createToday(Market $market, DateTimeImmutable $today = null) : self
     {
         $instance = new self();
         $instance->market = $market;
@@ -29,7 +29,7 @@ class MarketDate
         return $instance;
     }
 
-    public static function create(MarketTimeZone $market, DateTimeInterface $date, DateTimeImmutable $today = null) : self
+    public static function create(Market $market, DateTimeInterface $date, DateTimeImmutable $today = null) : self
     {
         $instance = new self();
         $instance->market = $market;
@@ -39,7 +39,7 @@ class MarketDate
         return $instance;
     }
 
-    public static function createFromOffset(MarketTimeZone $market, int $offset, DateTimeImmutable $today = null) : self
+    public static function createFromOffset(Market $market, int $offset, DateTimeImmutable $today = null) : self
     {
         $instance = new self();
         $instance->market = $market;
@@ -68,14 +68,14 @@ class MarketDate
         return $date->format('Z') === $this->date->format('Z');
     }
 
-    public function getMarketTimeZone() : MarketTimeZone
+    public function getMarketTimeZone() : Market
     {
         return $this->market;
     }
 
     public function getMarket() : string
     {
-        return $this->market->getMarket();
+        return $this->market->getName();
     }
 
     public function getTimeZone() : DateTimeZone

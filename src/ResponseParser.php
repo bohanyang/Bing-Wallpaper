@@ -3,7 +3,7 @@
 namespace BohanYang\BingWallpaper;
 
 use Assert\Assertion;
-use DateTimeImmutable;
+use Safe\DateTimeImmutable;
 use DateTimeZone;
 use InvalidArgumentException;
 use function array_shift;
@@ -19,10 +19,6 @@ class ResponseParser
     public static function parseFullStartDate(string $fullStartDate) : DateTimeImmutable
     {
         $d = DateTimeImmutable::createFromFormat('YmdHi', $fullStartDate, new DateTimeZone('UTC'));
-
-        if ($d === false) {
-            throw new InvalidArgumentException("Failed to parse full start date ${fullStartDate}");
-        }
 
         if ((int) $d->format('G') < 12) {
             // The moment of date change is the new date's 00:00

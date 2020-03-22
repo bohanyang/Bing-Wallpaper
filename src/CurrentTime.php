@@ -2,7 +2,7 @@
 
 namespace BohanYang\BingWallpaper;
 
-use DateTimeImmutable;
+use Safe\DateTimeImmutable;
 use DateTimeZone;
 use function array_filter;
 
@@ -63,7 +63,7 @@ class CurrentTime
 
     public function getMarketsHaveBecomeTheLaterDate(array $markets) : array
     {
-        return array_filter($markets, function (MarketTimeZone $market) {
+        return array_filter($markets, function (Market $market) {
             return $this->hasBecomeTheLaterDate($market->getTimeZone());
         });
     }

@@ -4,7 +4,6 @@ namespace BohanYang\BingWallpaper;
 
 use DateTimeInterface;
 use Exception;
-use Symfony\Component\VarDumper\Caster\DateCaster;
 use Throwable;
 
 use function rtrim;
@@ -12,27 +11,26 @@ use function Safe\sprintf;
 use function str_pad;
 use function strlen;
 
-class FetchArchiveFailure extends Exception
+class RequestException extends Exception
 {
     public function __construct(
         string $message,
-        MarketDate $marketDate,
+        RequestParams $params,
         DateTimeInterface $responseDate = null,
-        Throwable $previous = null,
-        int $code = 0
+        Throwable $previous = null
     ) {
-        $message .= ". Market: {$marketDate->getMarket()}";
-        $message .= ', Date: ' . self::formatDateTime($marketDate->getDate());
-        $message .= ", Offset: {$marketDate->getOffset()}";
+        $message .= ". Market: {$params->getMarket()}";
+        $message .= ', Date: ' . self::formatDateTime($params->getDate());
+        $message .= ", Offset: {$params->getOffset()}";
 
         if ($responseDate !== null) {
             $message .= ', Response Date: ' . self::formatDateTime($responseDate);
         }
 
-        parent::__construct($message, $code, $previous);
+        parent::__construct($message, 0, $previous);
     }
 
-    /** @see DateCaster::formatDateTime() */
+    /** @see \Symfony\Component\VarDumper\Caster\DateCaster::formatDateTime() */
     private static function formatDateTime(DateTimeInterface $d) : string
     {
         $tz = $d->format('e');
@@ -42,8 +40,8 @@ class FetchArchiveFailure extends Exception
         return $d->format('Y-m-d H:i:' . self::formatSeconds($d->format('s'), $d->format('u'))) . $tz;
     }
 
-    /** @see DateCaster::formatSeconds() */
-    private static function formatSeconds(string $s, string $us) : string
+    /** @see \Symfony\Component\VarDumper\Caster\DateCaster::formatSeconds() */
+    private static function formatSeconds(string $s, string $us): string
     {
         return sprintf('%02d.%s', $s, 0 === ($len = strlen($t = rtrim($us, '0'))) ? '0' : ($len <= 3 ? str_pad($t, 3, '0') : $us));
     }

@@ -33,10 +33,8 @@ final class GuzzleMiddleware
                     return true;
                 }
 
-                if ($response !== null) {
-                    if ($statusDecider($response->getStatusCode())) {
-                        return true;
-                    }
+                if ($response !== null && $statusDecider($response->getStatusCode())) {
+                    return true;
                 }
 
                 return false;

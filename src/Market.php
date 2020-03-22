@@ -3,12 +3,12 @@
 namespace BohanYang\BingWallpaper;
 
 use DateInterval;
-use DateTimeImmutable;
+use Safe\DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
 use InvalidArgumentException;
 
-class MarketTimeZone
+class Market
 {
     public const MAPPINGS = [
         'ROW' => 'America/Los_Angeles',   // UTC -8 / UTC -7
@@ -26,31 +26,31 @@ class MarketTimeZone
     ];
 
     /** @var string */
-    private $market;
+    private $name;
 
     /** @var DateTimeZone */
-    private $tz;
+    private $timezone;
 
-    public function __construct(string $market, DateTimeZone $tz = null)
+    public function __construct(string $name, DateTimeZone $tz = null)
     {
         if ($tz === null) {
-            if (!isset(self::MAPPINGS[$market])) {
-                return new InvalidArgumentException("Market ${market} is unknown and no time zone provided");
+            if (!isset(self::MAPPINGS[$name])) {
+                return new InvalidArgumentException("Market ${name} is unknown and no time zone provided");
             }
 
-            $tz = new DateTimeZone(self::MAPPINGS[$market]);
+            $tz = new DateTimeZone(self::MAPPINGS[$name]);
         }
 
-        $this->market = $market;
-        $this->tz = $tz;
+        $this->name = $name;
+        $this->timezone = $tz;
     }
 
     public function getToday(DateTimeImmutable $today = null) : DateTimeImmutable
     {
         if ($today === null) {
-            $today = new DateTimeImmutable('today', $this->tz);
+            $today = new DateTimeImmutable('today', $this->timezone);
         } else {
-            $today = $today->setTimezone($this->tz)->setTime(0, 0, 0);
+            $today = $today->setTimezone($this->timezone)->setTime(0, 0, 0);
         }
 
         return $today;
@@ -58,7 +58,7 @@ class MarketTimeZone
 
     public function getDate(DateTimeInterface $date) : DateTimeImmutable
     {
-        return new DateTimeImmutable($date->format('Y-m-d'), $this->tz);
+        return new DateTimeImmutable($date->format('Y-m-d'), $this->timezone);
     }
 
     /** Get the date "$offset" days before today */
@@ -73,13 +73,13 @@ class MarketTimeZone
         return $today->sub($interval);
     }
 
-    public function getMarket() : string
+    public function getName() : string
     {
-        return $this->market;
+        return $this->name;
     }
 
     public function getTimeZone() : DateTimeZone
     {
-        return $this->tz;
+        return $this->timezone;
     }
 }
