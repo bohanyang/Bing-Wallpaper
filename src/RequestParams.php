@@ -2,7 +2,7 @@
 
 namespace BohanYang\BingWallpaper;
 
-use DateTimeImmutable;
+use Safe\DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
 

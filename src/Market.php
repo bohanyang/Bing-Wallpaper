@@ -48,12 +48,10 @@ class Market
     public function getToday(DateTimeImmutable $today = null) : DateTimeImmutable
     {
         if ($today === null) {
-            $today = new DateTimeImmutable('today', $this->timezone);
-        } else {
-            $today = $today->setTimezone($this->timezone)->setTime(0, 0, 0);
+            return new DateTimeImmutable('today', $this->timezone);
         }
 
-        return $today;
+        return $today->setTimezone($this->timezone)->setTime(0, 0, 0);
     }
 
     public function getDate(DateTimeInterface $date) : DateTimeImmutable
