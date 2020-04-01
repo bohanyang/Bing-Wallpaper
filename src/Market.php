@@ -76,6 +76,11 @@ class Market
         return $this->name;
     }
 
+    public function __toString() : string
+    {
+        return $this->name;
+    }
+
     public function getTimeZone() : DateTimeZone
     {
         return $this->timezone;
