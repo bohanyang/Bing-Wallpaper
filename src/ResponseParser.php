@@ -97,7 +97,10 @@ class ResponseParser
      */
     public static function parseCopyright(string $copyright)
     {
-        $regex = '/(.+?)(?: |\x{3000})?(?:\(|\x{FF08})?(?: |\x{3000})?\x{00A9}(?: |\x{3000})?(.+?)(?: |\x{3000})?(?:\)|\x{FF09})?$/u';
+        $trim = '/^[\pZ\pC]+|[\pZ\pC]+$/u';
+        $copyright = preg_replace($trim, '', $copyright);
+
+        $regex = '/^(.+?)\pZ*(?:\(|\x{FF08})\pZ*\x{00A9}\pZ*(.+?)\pZ*(?:\)|\x{FF09})$/u';
         $matches = [];
 
         if (preg_match($regex, $copyright, $matches) !== 1) {
